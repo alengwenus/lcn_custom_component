@@ -164,17 +164,25 @@ class PchkConnectionManager:
                     break
 
                 try:
-                    message = data.decode().split(PckGenerator.TERMINATION)[0]
+                    message = data.decode("utf-8").split(PckGenerator.TERMINATION)[0]
                 except UnicodeDecodeError as err:
-                    _LOGGER.warning(
-                        "PCK decoding error: %s - skipping received PCK message", err
-                    )
-                    continue
+                    try:
+                        message = data.decode("cp1250").split(PckGenerator.TERMINATION)[
+                            0
+                        ]
+                        _LOGGER.warning(
+                            "Incorrect PCK encoding detected, possibly caused by LinHK: %s - PCK recovered using cp1250",
+                            err,
+                        )
+                    except UnicodeDecodeError as err2:
+                        _LOGGER.warning(
+                            "PCK decoding error: %s - skipping received PCK message",
+                            err2,
+                        )
+                        continue
                 await self.process_message(message)
-        except asyncio.CancelledError:
-            pass
-
-        _LOGGER.debug("Read data loop closed")
+        finally:
+            _LOGGER.debug("Read data loop closed")
 
     async def write_data_loop(self) -> None:
         """Processes queue and writes data."""
@@ -194,14 +202,11 @@ class PchkConnectionManager:
                 self.writer.write(data)
                 await self.writer.drain()
                 self.last_bus_activity = time.time()
-        except asyncio.CancelledError:
-            pass
-
-        # empty the queue
-        while not self.buffer.empty():
-            await self.buffer.get()
-
-        _LOGGER.debug("Write data loop closed")
+        finally:
+            # empty the queue
+            while not self.buffer.empty():
+                await self.buffer.get()
+            _LOGGER.debug("Write data loop closed")
 
     # Open/close connection, authentication & setup.
 

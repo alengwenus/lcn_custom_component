@@ -571,16 +571,18 @@ class PckGenerator:
             raise ValueError("Wrong motor position mode")
 
         if mode == lcn_defs.MotorPositioningMode.BS4:
-            if state not in [
-                lcn_defs.MotorStateModifier.UP,
-                lcn_defs.MotorStateModifier.DOWN,
-            ]:
+            new_motor_id = [1, 2, 5, 6][motor_id]
+            if state == lcn_defs.MotorStateModifier.DOWN:
+                # AU=window open / cover down
+                action = "AU"
+            elif state == lcn_defs.MotorStateModifier.UP:
+                # ZU=window close / cover up
+                action = "ZU"
+            elif state == lcn_defs.MotorStateModifier.STOP:
+                action = "ST"
+            else:
                 raise ValueError("Invalid motor state for BS4 mode")
 
-            new_motor_id = [1, 2, 5, 6][motor_id]
-            # AU=window open / cover down
-            # ZU=window close / cover up
-            action = "AU" if state == lcn_defs.MotorStateModifier.DOWN else "ZU"
             return f"R8M{new_motor_id}{action}"
 
         # lcn_defs.MotorPositioningMode.NONE
@@ -622,6 +624,7 @@ class PckGenerator:
 
         :param    int                   motor_id:   The motor port of the LCN module
         :param    float                 position:   The position to set in percentage (0..100)
+                                                    (0: closed cover, 100: open cover)
         :param    MotorPositioningMode  mode:       The motor positioning mode
 
         :return:  The PCK command (without address header) as text
@@ -638,11 +641,11 @@ class PckGenerator:
 
         if mode == lcn_defs.MotorPositioningMode.BS4:
             new_motor_id = [1, 2, 5, 6][motor_id]
-            action = f"GP{int(2 * position):03d}"
+            action = f"GP{int(200 - 2 * position):03d}"
             return f"R8M{new_motor_id}{action}"
         elif mode == lcn_defs.MotorPositioningMode.MODULE:
             new_motor_id = 1 << motor_id
-            return f"JH{position:03d}{new_motor_id:03d}"
+            return f"JH{100 - position:03d}{new_motor_id:03d}"
 
         return ""
 

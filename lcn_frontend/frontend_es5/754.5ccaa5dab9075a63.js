@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunklcn_frontend=self.webpackChunklcn_frontend||[]).push([["754"],{95799:function(e,n,l){Object.defineProperty(n,"__esModule",{value:!0});var t=l(23389);"undefined"==typeof Intl&&("undefined"!=typeof window?Object.defineProperty(window,"Intl",{value:{}}):"undefined"!=typeof global&&Object.defineProperty(global,"Intl",{value:{}})),Object.defineProperty(Intl,"getCanonicalLocales",{value:t.getCanonicalLocales,writable:!0,enumerable:!1,configurable:!0})}}]);
+//# sourceMappingURL=754.5ccaa5dab9075a63.js.map

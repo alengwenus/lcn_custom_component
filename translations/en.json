@@ -1,10 +1,10 @@
 {
     "config": {
         "abort": {
+            "already_configured": "PCHK connection using the same ip address/port is already configured.",
             "reconfigure_successful": "Re-configuration was successful"
         },
         "error": {
-            "already_configured": "PCHK connection using the same ip address/port is already configured.",
             "authentication_error": "Authentication failed. Wrong username or password.",
             "connection_refused": "Unable to connect to PCHK. Check IP and port.",
             "license_error": "Maximum number of connections was reached. An additional licence key is required."
@@ -79,16 +79,9 @@
         },
         "invalid_device_id": {
             "message": "LCN device for given device ID has not been configured."
-        },
-        "no_device_identifier": {
-            "message": "No device identifier provided. Please provide the device ID."
         }
     },
     "issues": {
-        "deprecated_address_parameter": {
-            "description": "The 'address' parameter in the LCN action calls is deprecated. The 'device ID' parameter should be used going forward.\n\nPlease adjust your automations or scripts to fix this issue.",
-            "title": "Deprecated 'address' parameter"
-        },
         "deprecated_keylock_sensor": {
             "description": "Your LCN key lock binary sensor entity `{entity}` is being used in automations or scripts. A key lock switch entity is available and should be used going forward.\n\nPlease adjust your automations or scripts to fix this issue.",
             "title": "Deprecated LCN key lock binary sensor"
@@ -100,22 +93,22 @@
     },
     "services": {
         "address_to_device_id": {
-            "description": "Convert LCN address to device ID.",
+            "description": "Converts an LCN address into a device ID.",
             "fields": {
                 "host": {
                     "description": "Host name as given in the integration panel.",
                     "name": "Host name"
                 },
                 "id": {
-                    "description": "Target module or group ID.",
+                    "description": "Module or group number of the target.",
                     "name": "Module or group ID"
                 },
                 "segment_id": {
-                    "description": "Target segment ID.",
+                    "description": "Segment number of the target.",
                     "name": "Segment ID"
                 },
                 "type": {
-                    "description": "Target type.",
+                    "description": "Module type of the target.",
                     "name": "Type"
                 }
             },
