@@ -6,8 +6,9 @@
   "config_flow": true,
   "dependencies": ["http", "websocket_api"],
   "documentation": "https://www.home-assistant.io/integrations/lcn",
-  "iot_class": "local_push",
+  "iot_class": "local_polling",
   "loggers": ["pypck"],
-  "requirements": ["pypck==0.8.7", "lcn-frontend==0.2.5"],
-  "version": "1.0.0"
+  "quality_scale": "silver",
+  "requirements": ["pypck==0.9.7", "lcn-frontend==0.2.7"],
+  "version": "1.1.0"
 }

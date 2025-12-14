@@ -471,19 +471,21 @@ class PckGenerator:
         return pck
 
     @staticmethod
-    def toggle_output(output_id: int, ramp: int) -> str:
+    def toggle_output(output_id: int, ramp: int, to_memory: bool = False) -> str:
         """Generate a command that toggles a single output-port.
 
         Toggle mode: (on->off, off->on).
 
         :param    int    output_id:    Output id 0..3
         :param    int    ramp:         Ramp value
+        :param    bool   to_memory:    If True, the dimming status is stored
+
         :return:    The PCK command (without address header) as text
         :rtype:    str
         """
         if (output_id < 0) or (output_id > 3):
             raise ValueError("Invalid output_id.")
-        return f"A{output_id + 1}TA{ramp:03d}"
+        return f"A{output_id + 1}{'MT' if to_memory else 'TA'}{ramp:03d}"
 
     @staticmethod
     def toggle_all_outputs(ramp: int) -> str:
@@ -1046,7 +1048,9 @@ class PckGenerator:
 
     @staticmethod
     def lock_keys_tab_a_temporary(
-        time: int, time_unit: lcn_defs.TimeUnit, keys: list[bool]
+        time: int,
+        time_unit: lcn_defs.TimeUnit,
+        keys: list[lcn_defs.KeyLockStateModifier],
     ) -> str:
         """Generate a command to lock keys for table A temporary.
 
@@ -1083,7 +1087,7 @@ class PckGenerator:
             raise ValueError("Wrong time_unit.")
 
         for key in keys:
-            ret += "1" if key else "0"
+            ret += "1" if key == lcn_defs.KeyLockStateModifier.ON else "0"
 
         return ret
 
