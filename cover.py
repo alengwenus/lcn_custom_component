@@ -1,23 +1,24 @@
 """Support for LCN covers."""
 
-import asyncio
 from collections.abc import Coroutine, Iterable
 from datetime import timedelta
 from functools import partial
 from typing import Any
 
-import pypck
-
 from homeassistant.components.cover import (
     ATTR_POSITION,
-    DOMAIN as DOMAIN_COVER,
     CoverEntity,
     CoverEntityFeature,
+)
+from homeassistant.components.cover import (
+    DOMAIN as DOMAIN_COVER,
 )
 from homeassistant.const import CONF_DOMAIN, CONF_ENTITIES
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
+
+import pypck
 
 from .const import (
     CONF_DOMAIN_DATA,
@@ -28,7 +29,7 @@ from .const import (
 from .entity import LcnEntity
 from .helpers import InputType, LcnConfigEntry
 
-PARALLEL_UPDATES = 0
+PARALLEL_UPDATES = 2
 SCAN_INTERVAL = timedelta(minutes=1)
 
 
@@ -274,7 +275,7 @@ class LcnRelayCover(LcnEntity, CoverEntity):
                     self.motor, self.positioning_mode, SCAN_INTERVAL.seconds
                 )
             )
-        self._attr_available = any(asyncio.gather(*coros))
+        self._attr_available = any([await coro for coro in coros])
 
     def input_received(self, input_obj: InputType) -> None:
         """Set cover states when LCN input object (command) is received."""

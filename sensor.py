@@ -5,10 +5,10 @@ from datetime import timedelta
 from functools import partial
 from itertools import chain
 
-import pypck
-
 from homeassistant.components.sensor import (
     DOMAIN as DOMAIN_SENSOR,
+)
+from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
 )
@@ -29,6 +29,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
 
+import pypck
+
 from .const import (
     CONF_DOMAIN_DATA,
     LED_PORTS,
@@ -40,7 +42,7 @@ from .const import (
 from .entity import LcnEntity
 from .helpers import InputType, LcnConfigEntry
 
-PARALLEL_UPDATES = 0
+PARALLEL_UPDATES = 2
 SCAN_INTERVAL = timedelta(minutes=1)
 
 

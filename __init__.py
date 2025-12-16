@@ -2,21 +2,20 @@
 
 from __future__ import annotations
 
-import importlib.util
-import logging
-import os
-import sys
 from functools import partial
+import logging
 from typing import cast
 
-for module_name in ("pypck", "lcn_frontend"):
-    spec = importlib.util.spec_from_file_location(
-        module_name,
-        os.path.join(os.path.dirname(__file__), module_name, "__init__.py"),
-    )
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
+import pypck
+from pypck.connection import (
+    PchkAuthenticationError,
+    PchkConnectionFailedError,
+    PchkConnectionManager,
+    PchkConnectionRefusedError,
+    PchkLcnNotConnectedError,
+    PchkLicenseError,
+)
+from pypck.lcn_defs import LcnEvent
 
 from homeassistant.const import (
     CONF_DEVICE_ID,
@@ -33,25 +32,10 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import (
     config_validation as cv,
-)
-from homeassistant.helpers import (
     device_registry as dr,
-)
-from homeassistant.helpers import (
     entity_registry as er,
 )
 from homeassistant.helpers.typing import ConfigType
-from pypck.connection import (
-    PchkAuthenticationError,
-    PchkConnectionFailedError,
-    PchkConnectionManager,
-    PchkConnectionRefusedError,
-    PchkLcnNotConnectedError,
-    PchkLicenseError,
-)
-from pypck.lcn_defs import LcnEvent
-
-import pypck
 
 from .const import (
     CONF_ACKNOWLEDGE,

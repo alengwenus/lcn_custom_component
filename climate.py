@@ -1,15 +1,14 @@
 """Support for LCN climate control."""
 
-import asyncio
 from collections.abc import Iterable
 from datetime import timedelta
 from functools import partial
 from typing import Any, cast
 
-import pypck
-
 from homeassistant.components.climate import (
     DOMAIN as DOMAIN_CLIMATE,
+)
+from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityFeature,
     HVACMode,
@@ -26,6 +25,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
 
+import pypck
+
 from .const import (
     CONF_DOMAIN_DATA,
     CONF_LOCKABLE,
@@ -37,7 +38,7 @@ from .const import (
 from .entity import LcnEntity
 from .helpers import InputType, LcnConfigEntry
 
-PARALLEL_UPDATES = 0
+PARALLEL_UPDATES = 2
 SCAN_INTERVAL = timedelta(minutes=1)
 
 
@@ -172,30 +173,30 @@ class LcnClimate(LcnEntity, ClimateEntity):
     async def async_update(self) -> None:
         """Update the state of the entity."""
         self._attr_available = any(
-            asyncio.gather(
-                self.device_connection.request_status_variable(
+            [
+                await self.device_connection.request_status_variable(
                     self.variable, SCAN_INTERVAL.seconds
                 ),
-                self.device_connection.request_status_variable(
+                await self.device_connection.request_status_variable(
                     self.setpoint, SCAN_INTERVAL.seconds
                 ),
-            )
+            ]
         )
 
     def input_received(self, input_obj: InputType) -> None:
         """Set temperature value when LCN input object is received."""
         if not isinstance(input_obj, pypck.inputs.ModStatusVar):
             return
+        self._attr_available = True
         if input_obj.get_var() == self.variable:
             self._attr_current_temperature = float(
                 input_obj.get_value().to_var_unit(self.unit)
             )
-            self._attr_available = True
         elif input_obj.get_var() == self.setpoint:
             self._is_on = not input_obj.get_value().is_locked_regulator()
             if self._is_on:
                 self._attr_target_temperature = float(
                     input_obj.get_value().to_var_unit(self.unit)
                 )
-            self._attr_available = True
+
         self.async_write_ha_state()

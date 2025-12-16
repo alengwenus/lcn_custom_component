@@ -4,13 +4,14 @@ from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
-import pypck
-
-from homeassistant.components.scene import DOMAIN as DOMAIN_SCENE, Scene
+from homeassistant.components.scene import DOMAIN as DOMAIN_SCENE
+from homeassistant.components.scene import Scene
 from homeassistant.const import CONF_DOMAIN, CONF_ENTITIES, CONF_SCENE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
+
+import pypck
 
 from .const import (
     CONF_DOMAIN_DATA,
@@ -22,7 +23,7 @@ from .const import (
 from .entity import LcnEntity
 from .helpers import LcnConfigEntry
 
-PARALLEL_UPDATES = 0
+PARALLEL_UPDATES = 2
 
 
 def add_lcn_entities(

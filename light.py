@@ -5,21 +5,23 @@ from datetime import timedelta
 from functools import partial
 from typing import Any
 
-import pypck
-
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     ATTR_TRANSITION,
-    DOMAIN as DOMAIN_LIGHT,
     ColorMode,
     LightEntity,
     LightEntityFeature,
+)
+from homeassistant.components.light import (
+    DOMAIN as DOMAIN_LIGHT,
 )
 from homeassistant.const import CONF_DOMAIN, CONF_ENTITIES
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.util.color import brightness_to_value, value_to_brightness
+
+import pypck
 
 from .const import (
     CONF_DIMMABLE,
@@ -33,7 +35,7 @@ from .helpers import InputType, LcnConfigEntry
 
 BRIGHTNESS_SCALE = (1, 100)
 
-PARALLEL_UPDATES = 0
+PARALLEL_UPDATES = 2
 SCAN_INTERVAL = timedelta(minutes=1)
 
 
