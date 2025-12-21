@@ -4,10 +4,10 @@ from collections.abc import Iterable
 from datetime import timedelta
 from functools import partial
 
+import pypck
+
 from homeassistant.components.binary_sensor import (
     DOMAIN as DOMAIN_BINARY_SENSOR,
-)
-from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
 )
 from homeassistant.const import CONF_DOMAIN, CONF_ENTITIES, CONF_SOURCE
@@ -15,14 +15,12 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
 
-import pypck
-
 from .const import CONF_DOMAIN_DATA
 from .entity import LcnEntity
 from .helpers import InputType, LcnConfigEntry
 
 PARALLEL_UPDATES = 2
-SCAN_INTERVAL = timedelta(minutes=1)
+SCAN_INTERVAL = timedelta(minutes=10)
 
 
 def add_lcn_entities(

@@ -5,20 +5,18 @@ from datetime import timedelta
 from functools import partial
 from typing import Any
 
+import pypck
+
 from homeassistant.components.cover import (
     ATTR_POSITION,
+    DOMAIN as DOMAIN_COVER,
     CoverEntity,
     CoverEntityFeature,
-)
-from homeassistant.components.cover import (
-    DOMAIN as DOMAIN_COVER,
 )
 from homeassistant.const import CONF_DOMAIN, CONF_ENTITIES
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
-
-import pypck
 
 from .const import (
     CONF_DOMAIN_DATA,

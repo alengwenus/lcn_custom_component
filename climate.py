@@ -5,10 +5,10 @@ from datetime import timedelta
 from functools import partial
 from typing import Any, cast
 
+import pypck
+
 from homeassistant.components.climate import (
     DOMAIN as DOMAIN_CLIMATE,
-)
-from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityFeature,
     HVACMode,
@@ -24,8 +24,6 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
-
-import pypck
 
 from .const import (
     CONF_DOMAIN_DATA,

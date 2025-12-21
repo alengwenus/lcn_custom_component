@@ -5,10 +5,10 @@ from datetime import timedelta
 from functools import partial
 from itertools import chain
 
+import pypck
+
 from homeassistant.components.sensor import (
     DOMAIN as DOMAIN_SENSOR,
-)
-from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
 )
@@ -28,8 +28,6 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import ConfigType
-
-import pypck
 
 from .const import (
     CONF_DOMAIN_DATA,
